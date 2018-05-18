@@ -1,0 +1,1 @@
+console.log('gdcfun.js loaded')
