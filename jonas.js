@@ -1,9 +1,9 @@
 console.log('jonas.js loaded')
 
-jonas=function(){
 
-}
-
-jonas.hello=()=>{
-   return 'hello from Jonas at '+Date()
+jonas=function(cmd){
+    this.hello=()=>{
+        return 'hello from '+this+' at '+Date()
+    }
+    debugger
 }
