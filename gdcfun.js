@@ -6,3 +6,9 @@ if(typeof(gdc)=='undefined'){
     s.src='https://mathbiol.github.io/gdc/gdc.js'
     document.head.appendChild(s)
 }
+if(typeof(jonas)=='undefined'){
+    console.log("loading jonas.js")
+    let s = document.createElement('script')
+    s.src='jonas.js'
+    document.head.appendChild(s)
+}
