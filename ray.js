@@ -2,7 +2,10 @@ console.log('ray.js loaded')
 
 ray=function(){
     this.url='https://api.gdc.cancer.gov'
+    //debugger
 }
+
+ray.url='https://api.gdc.cancer.gov'
 
 this.hello=()=>{
     return 'Hello from ray at ' + Date()
@@ -11,8 +14,8 @@ this.hello=()=>{
 ray.get=async (cmd, callback)=>{
     callback = callback || 'recordStatus'
     cmd=cmd||'status' // default cmd is status
-    var r = (await fetch(this.url+'/'+cmd)).json()
-    callback(cmd)
+    var r = (await fetch(ray.url+'/'+cmd)).json()
+    //callback(cmd)
     return await r
 }
 
@@ -105,6 +108,12 @@ ray.get_mapping=(cmd)=>{
 
 // working on it
 function parseQuery(query) {
-    return query
+  let dict = {}
+  let items = query.split('&')
+  for (let i = 0; i < items.length; ++i) {
+    let parms = items[i].split('=')
+    dict[parms[0]] = parms[1]
+  }
+  return dict
 }
 
