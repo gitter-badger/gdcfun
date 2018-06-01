@@ -1,13 +1,27 @@
 console.log('xiaohan.js')
 
-ray=function(){
+xiaohan = function(cmd) {
+    this.url = 'https://api.gdc.cancer.gov';
 
+    // endpoint: status
+    this.get = async function(cmd){
+        cmd = cmd || 'status';
+        try {
+            const response = await fetch(this.url + '/' + cmd);
+            console.log(response.json());
+        }
+        catch(err) {
+            console.log('fetch failed', err);
+        }
+    }
+
+    
+    if (cmd) {
+        return this.cmd;
+    } else {
+        return this;
+    }
 }
 
-ray.times=(a, b)=>{
-    return a * b
-}
 
-ray.getLength=(a)=>{
-    return a.length
-}
+// endpoint: xx
