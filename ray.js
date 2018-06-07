@@ -108,6 +108,11 @@ ray.get_mapping=(cmd)=>{
 
 // working on it
 function parseQuery(query) {
-    return query
+  let dict = {}
+  let items = query.split('&')
+  for (let i = 0; i < items.length; ++i) {
+    let parms = items[i].split('=')
+    dict[parms[0]] = parms[1]
+  }
+  return dict
 }
-
