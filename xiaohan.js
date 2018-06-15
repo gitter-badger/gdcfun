@@ -6,14 +6,15 @@ xiaohan = function(cmd) {
     // endpoint: status
     this.get = async function(cmd){
         cmd = cmd || 'status';
+        //debugger
         try {
-            const response = await fetch(this.url + '/' + cmd);
-            console.log('fetch success');
-            return await response.json();
+            const response = await (fetch(this.url + '/' + cmd).json());
+            console.log('fetch worked');
         }
         catch(err) {
             console.log('fetch failed', err);
         }
+        return await response
     }
 
 
@@ -26,3 +27,4 @@ xiaohan = function(cmd) {
 
 
 // endpoint: xx
+

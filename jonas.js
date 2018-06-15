@@ -25,6 +25,11 @@ jonas= function(cmd){
     
 }
 
+if(typeof(define)!=="undefined"){
+    define(jonas)
+    console.log(':-O')
+}
+
 // this one will automatically record status when the jonas.js is loaded
 
 // j = new jonas
