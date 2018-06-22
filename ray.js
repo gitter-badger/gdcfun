@@ -19,7 +19,7 @@ ray.get=async (cmd, callback)=>{
       console.log('get'+str(cmd)+'success');
     } 
     catch(err) {
-            console.log(err);
+      console.log(err);
     }
     //callback(cmd)
     return await r

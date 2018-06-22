@@ -12,14 +12,14 @@ if(typeof(jonas)=='undefined'){
     s.src='jonas.js'
     document.head.appendChild(s)
 }
-if(typeof(jonas)=='undefined'){
+if(typeof(ray)=='undefined'){
     console.log("loading ray.js")
     let s = document.createElement('script')
     s.src='ray.js'
     document.head.appendChild(s)
 }
-if(typeof(jonas)=='undefined'){
-    console.log("loading xiaohan.js.js")
+if(typeof(xiaohan)=='undefined'){
+    console.log("loading xiaohan.js")
     let s = document.createElement('script')
     s.src='xiaohan.js'
     document.head.appendChild(s)
