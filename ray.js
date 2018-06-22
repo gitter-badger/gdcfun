@@ -8,19 +8,25 @@ ray=function(){
 ray.url='https://api.gdc.cancer.gov'
 
 this.hello=()=>{
-    return 'Hello from ray at ' + Date()
+    return 'ray.js loaded at ' + Date()
 }
 
 ray.get=async (cmd, callback)=>{
     callback = callback || 'recordStatus'
     cmd=cmd||'status' // default cmd is status
-    var r = (await fetch(ray.url+'/'+cmd)).json()
+    try {
+      var r = (await fetch(ray.url+'/'+cmd)).json()
+      console.log('get'+str(cmd)+'success');
+    } 
+    catch(err) {
+            console.log(err);
+    }
     //callback(cmd)
     return await r
 }
 
 // recording status when function is initiatized
-function recordStatus(cmd) {
+ray.recordStatus=(cmd)=>{
     var that=this
     this.get().then(x=>{
         that.status=x
@@ -98,7 +104,7 @@ ray.getFile=(cmd, uuid, pretty)=>{
 ray.getAnnotions=(cmd)=>{
     pretty = pretty || 'true'
     let fullurl = 'annotions'+'?filter='
-    fullurl += parseQuery(query)
+    fullurl += ray.parseQuery(query)
     return ray.get(fullurl)
 }
 
@@ -106,8 +112,8 @@ ray.get_mapping=(cmd)=>{
     return ray.get('_mapping')
 }
 
-// working on it
-function parseQuery(query) {
+// parse query from json filter
+ray.parseQuery=(query)=>{
   let dict = {}
   let items = query.split('&')
   for (let i = 0; i < items.length; ++i) {
@@ -116,3 +122,13 @@ function parseQuery(query) {
   }
   return dict
 }
+
+ray.parseParms=(parms)=>{
+  let output = "?"
+  for (let i = 0; i < items.length; ++i) {
+    output += "${items[i]}=${parms[items[i]]}&"
+  }
+  return output
+}
+
+// define(ray) export module.exports
