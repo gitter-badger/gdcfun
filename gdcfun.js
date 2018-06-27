@@ -24,3 +24,21 @@ if(typeof(xiaohan)=='undefined'){
     s.src='xiaohan.js'
     document.head.appendChild(s)
 }
+
+
+// Xiaohan asks
+// when I try to import ray's module using` 
+// gdc = require('https://mathbiol.github.io/gdcfun/gdcfun.js')` ,
+// it comes up with Error message 'Invalid module'. 
+// Ray and me are trying to fix it, do you have any suggestion?
+//
+// Sure,here's an example
+
+gdcfun={}
+gdcfun.hello=()=>{
+    return 'hello from gdcfun at '+Date()
+}
+
+if(typeof(define)!='undefined'){
+    define(gdcfun)
+}
