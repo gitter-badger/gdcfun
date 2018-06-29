@@ -9,12 +9,15 @@ xiaohan = function(cmd) {
 
     // endpoint: status
     this.get = async function(cmd){
-        cmd = cmd || 'status';
-        //debugger
+        if (typeof cmd === undefined) {
+            console.log('cmd undefined');
+            return;
+        }
+        cmd = cmd+'' || 'status';
         try {
             //const response = await (fetch(this.url + '/' + cmd).json());
             var response = (await fetch(this.url + '/' + cmd)).json();
-            console.log('get() success');
+            console.log('command ' + cmd +' success');
             return await response;
         }
         catch(err) {
@@ -53,32 +56,34 @@ xiaohan = function(cmd) {
     }
 
     // endpoint: cases
-    this.getCases = async function() {
-        endpoint = 'cases';
-        urlFetch = this.url + '/' + endpoint;
-        try {
-            var response = (await fetch(urlFetch)).json();
-            console.log('getCases() success');
-            return await response;
-        } 
-        catch(err) {
-            console.log(err);
+
+    // get case by  uuid
+    this.getCase = function() {
+        // default property
+        // property could add [filter, fromat, fields, expand, ...]
+        var defaultParams = {
+            pretty:'true',
+        };
+
+        if (arguments.length === 0) {
+            return this.get('cases');
         }
+        // update default property
+        params = arguments[0];
+        for (var prop in params) {
+            defaultParams[prop] = params[prop];
+        }
+
+        query = 'cases/' + defaultParams['uuid'];
+        for (var prop in defaultParams) {
+            if (prop === 'uuid') continue;
+            query += '?&' + prop + '='+ defaultParams[prop]
+        }
+        return this.get(query);
     }
 
-    // get case by case id
-    this.getCase = async function(id) {
-        cmd = 'cases';
-        urlFetch = this.url + '/' + cmd + '/' + id;
-        try {
-            var response = (await fetch(urlFetch)).json();
-            console.log('getCase() success');
-            return await response;
-        }
-        catch(err) {
-            console.log(err);
-        }
-    }
+    // endpoint: Files
+
 
 
     if (cmd) {
@@ -89,7 +94,7 @@ xiaohan = function(cmd) {
 }
 
 
-define(function(){
+define (function(){
     var exports = {};
     exports.method = xiaohan;
     return exports;
