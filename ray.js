@@ -200,9 +200,13 @@ ray.test=(cmd)=>{
 }
 
 // define(ray) export module.exports
-
-define (function(){
-    var exports = {};
-    exports.method = ray;
-    return exports;
-})
+if (typeof(define) !== "undefined") {
+    define(ray)
+    console.log('ray.js defined')
+// } else {
+//   define (function(){
+//     var exports = {};
+//     exports.method = ray;
+//     return exports;
+// })
+}
