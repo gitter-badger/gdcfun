@@ -178,11 +178,25 @@ ray.escape=(str)=>{
 
 // test function: read in object and automatically catagorize the query
 ray.test=(cmd)=>{
-  ray.escape()
+  //ray.escape()
   //encodeURIComponent
   //decodeURIComponent
-  //var json = '{"result":true, "count":42}';
+  var json = '{"method": "projects", "count":42}';
   //obj = JSON.parse(json);
+  
+  obj = JSON.parse(json)
+  if (obj['method'] == undefined) {
+    console.log('failure: missing method, return status instead')
+    return ray.get()
+  }
+  switch (obj['method']) {
+    case 'projects':
+      return ray.getProjects('hello')
+      break
+    case 'project':
+      return ray.getProject('hello','TARGET-NBL')
+      break
+  }
 }
 
 // define(ray) export module.exports
