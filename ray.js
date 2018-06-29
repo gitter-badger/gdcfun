@@ -8,22 +8,35 @@ ray=function(){
     //debugger
 }
 
-//ray.url='https://api.gdc.cancer.gov'
+ray.url='https://api.gdc.cancer.gov'
 
 
 // main function to fetch data
 ray.get=async (cmd, callback)=>{
-    callback = callback || 'recordStatus'
-    cmd = cmd || 'status' // default cmd is status
-    try {
-      var r = (await fetch(ray.url+'/'+cmd)).json()
-      console.log('success: getting '+ cmd)
-    } 
-    catch(err) {
-      console.log(err);
-    }
-    //callback(cmd)
-    return await r
+//     console.log(cmd)
+//     if (typeof(JSON.parse(cmd)) == 'object') {
+//         console.log(cmd)
+//     } else {
+        callback = callback || 'recordStatus'
+        cmd = cmd || 'status' // default cmd is status
+        try {
+          var r = (await fetch(ray.url+'/'+cmd)).json()
+//                           .then(function(response) {
+//                                         if (!response.ok) {
+//                                             throw Error(response.statusText)
+//                                         }
+//                                         return response
+//                                     })
+//                                     .then(response => console.log("ok"))
+//                                     .catch(error => console.log(error))       
+        } 
+        catch(err) {
+          console.log(err);
+        }
+        //callback(cmd)
+        console.log('success: getting '+ cmd)
+        return await r
+//     }
 }
 
 // recording status when function is initiatized
@@ -61,13 +74,22 @@ ray.getProjects=(cmd, from, size, sort, pretty)=>{
 }
 
 // get a project with project_id
-ray.getProject=(cmd, project_id, pretty)=>{
+ray.getProject=(cmd, project_id, expand, pretty)=>{
+    if (project_id == undefined) {
+      console.log('failure: missing project_id')
+      return {}
+    }
     pretty = pretty || 'true'
-    return ray.get('projects/'+project_id+'&pretty='+pretty)
+    expand = expand || 'summary,summary.experimental_strategies,summary.data_categories'
+    return ray.get('projects/'+project_id+'?expand='+expand+'&pretty='+pretty)
 }
 
 // get cases
 ray.getCases=(cmd, query, pretty)=>{
+    if (query == undefined) {
+      console.log('failure: missing query')
+      return {}
+    }
     pretty = pretty || 'true'
     let fullurl = 'cases'+'?filter='
     fullurl += parseQuery(query)
@@ -128,6 +150,7 @@ ray.parseQuery=(query)=>{
   return dict
 }
 
+// construct url from json object
 ray.parseParms=(parms)=>{
   if (parms == null)
     return parms
@@ -138,6 +161,28 @@ ray.parseParms=(parms)=>{
     output += "${items[i]}=${parms[items[i]]}&"
   }
   return output
+}
+
+// escape the newline symbol in string
+ray.escape=(str)=>{
+  return str
+    .replace(/[\\]/g, '\\\\')
+    .replace(/[\"]/g, '\\\"')
+    .replace(/[\/]/g, '\\/')
+    .replace(/[\b]/g, '\\b')
+    .replace(/[\f]/g, '\\f')
+    .replace(/[\n]/g, '\\n')
+    .replace(/[\r]/g, '\\r')
+    .replace(/[\t]/g, '\\t');
+}
+
+// test function: read in object and automatically catagorize the query
+ray.test=(cmd)=>{
+  ray.escape()
+  //encodeURIComponent
+  //decodeURIComponent
+  //var json = '{"result":true, "count":42}';
+  //obj = JSON.parse(json);
 }
 
 // define(ray) export module.exports
