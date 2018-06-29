@@ -125,8 +125,8 @@ success: getting projects?from=0&sort=project.project_id:asc&pretty=true
 
 ```json
 {
-    "project_id": <string>,
-    "expand": 'summary,summary.experimental_strategies,summary.data_categories',
+    "project_id": "string",
+    "expand": "summary,summary.experimental_strategies,summary.data_categories",
     "pretty": true
 }
 ```
