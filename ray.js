@@ -2,21 +2,22 @@ console.log('ray.js loaded')
 
 ray=function(){
     this.url='https://api.gdc.cancer.gov'
+    this.hello=()=>{
+        return 'ray.js loaded at ' + Date()
+    }
     //debugger
 }
 
-ray.url='https://api.gdc.cancer.gov'
+//ray.url='https://api.gdc.cancer.gov'
 
-this.hello=()=>{
-    return 'ray.js loaded at ' + Date()
-}
 
+// main function to fetch data
 ray.get=async (cmd, callback)=>{
     callback = callback || 'recordStatus'
-    cmd=cmd||'status' // default cmd is status
+    cmd = cmd || 'status' // default cmd is status
     try {
       var r = (await fetch(ray.url+'/'+cmd)).json()
-      console.log('get'+str(cmd)+'success');
+      console.log('success: getting '+ cmd)
     } 
     catch(err) {
       console.log(err);
@@ -50,9 +51,10 @@ ray.getProjects=(cmd, from, size, sort, pretty)=>{
     pretty = pretty || 'true'
     
     let fullurl = 'projects'+'?from='+from
-    if (size != 'undefined') {
-        fullurl += '&size='+toString(size)
+    if (size != undefined) {
+        fullurl += '&size='+ size
     }
+
     fullurl += '&sort='+sort+'&pretty='+pretty
 
     return ray.get(fullurl)
@@ -80,14 +82,14 @@ ray.getCase=(cmd, uuid, pretty, expand)=>{
 }
 
 // get files
-ray.getFiles=(cmd)=>{
+ray.getFiles=(cmd, from, size, sort, pretty)=>{
     from = from || '0'
     sort = sort || 'project.project_id:asc'
     pretty = pretty || 'true'
     
     let fullurl = 'files'+'?from='+from
-    if (size != 'undefined') {
-        fullurl += '&size='+toString(size)
+    if (size != undefined) {
+        fullurl += '&size='+ size
     }
     fullurl += '&sort='+sort+'&pretty='+pretty
 
@@ -114,6 +116,9 @@ ray.get_mapping=(cmd)=>{
 
 // parse query from json filter
 ray.parseQuery=(query)=>{
+  if (query == null)
+    return query
+
   let dict = {}
   let items = query.split('&')
   for (let i = 0; i < items.length; ++i) {
@@ -124,7 +129,11 @@ ray.parseQuery=(query)=>{
 }
 
 ray.parseParms=(parms)=>{
+  if (parms == null)
+    return parms
+  
   let output = "?"
+  let items = parms.split(',')
   for (let i = 0; i < items.length; ++i) {
     output += "${items[i]}=${parms[items[i]]}&"
   }
@@ -132,3 +141,9 @@ ray.parseParms=(parms)=>{
 }
 
 // define(ray) export module.exports
+
+define (function(){
+    var exports = {};
+    exports.method = ray;
+    return exports;
+})

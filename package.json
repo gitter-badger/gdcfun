@@ -1,0 +1,27 @@
+{
+  "name": "gdcfun",
+  "version": "0.0.1",
+  "description": "Google Summer of Code Open Health GDC exploration (NCI's Genomic Data Commons)",
+  "main": "gdc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mathbiol/gdcfun.git"
+  },
+  "keywords": [
+    "gdc",
+    "web",
+    "computing",
+    "javascript",
+    "cancer",
+    "genomics"
+  ],
+  "author": "Ray Cao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mathbiol/gdcfun/issues"
+  },
+  "homepage": "https://github.com/mathbiol/gdcfun#readme"
+}
