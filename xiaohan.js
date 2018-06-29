@@ -1,9 +1,5 @@
 console.log('xiaohan.js')
 
-
-
-
-
 xiaohan = function(cmd) {
     this.url = 'https://api.gdc.cancer.gov';
 
@@ -42,26 +38,38 @@ xiaohan = function(cmd) {
     }
 
     // input: project id
-    this.getProject = async function(id) {
-        cmd = 'projects';
-        urlFetch = this.url + '/' + cmd + '/' + id;
-        try {
-            var response = (await fetch(urlFetch)).json();
-            console.log('getProject() success');
-            return await response;
+    this.getProject = function() {
+        // no default parameters for getFile()
+        var defaultParams = {
+            project_id:''
         }
-        catch(err) {
-            console.log(err);
+        if (typeof arguments === 'undefined') {
+            return this.get('projects')
         }
+
+        params = arguments[0];
+        for (var prop in params) {
+            defaultParams[prop] = params[prop];
+        }       
+        query = 'projects';
+        for (var prop in defaultParams) {
+            if (prop === 'project_id') {
+                if (defaultParams['project_id'] !== '') {query = query + '/' + defaultParams['project_id'];}
+                query += '?';
+                continue;
+            }
+            query += '&' + prop + '=' + defaultParams[prop];
+        }
+        return this.get(query);
     }
 
     // endpoint: cases
-
     // get case by  uuid
     this.getCase = function() {
         // default property
         // property could add [filter, fromat, fields, expand, ...]
         var defaultParams = {
+            uuid: '',
             pretty:'true',
         };
 
@@ -74,16 +82,44 @@ xiaohan = function(cmd) {
             defaultParams[prop] = params[prop];
         }
 
-        query = 'cases/' + defaultParams['uuid'];
+        query = 'cases';
         for (var prop in defaultParams) {
-            if (prop === 'uuid') continue;
-            query += '?&' + prop + '='+ defaultParams[prop]
+            if (prop === 'uuid') {
+                if (defaultParams['uuid'] !== '') {query = query + '/' + defaultParams['uuid'];}
+                query += '?';
+                continue;
+            }
+            query += '&' + prop + '='+ defaultParams[prop];
         }
         return this.get(query);
     }
 
     // endpoint: Files
+    this.getFile = function() {
+        // no default parameters for getFile()
+        var defaultParams = {
+            uuid:''
+        }
+        if (typeof arguments === 'undefined') {
+            return this.get('files')
+        }
 
+        params = arguments[0];
+                
+        for (var prop in params) {
+            defaultParams[prop] = params[prop];
+        }
+        query = 'files';
+        for (var prop in defaultParams) {
+            if (prop === 'uuid') {
+                if (defaultParams['uuid'] != '') {query = query + '/' + defaultParams['uuid'];}
+                query += '?';
+                continue;
+            }
+            query += '&' + prop + '=' + defaultParams[prop];
+        }
+        return this.get(query);
+    }
 
 
     if (cmd) {
