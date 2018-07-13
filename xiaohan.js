@@ -130,8 +130,13 @@ xiaohan = function(cmd) {
 }
 
 
-define (function(){
-    var exports = {};
-    exports.method = xiaohan;
-    return exports;
-})
+// define (function(){
+//     var exports = {};
+//     exports.method = xiaohan;
+//     return exports;
+// })
+
+if (typeof(define) !== "undefined") {
+    define(xiaohan)
+    console.log('xiaohan.js defined')
+}
