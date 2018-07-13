@@ -83,8 +83,15 @@ ray.getCases = (cmd,query,pretty)=>{
     }
     pretty = pretty || 'true'
     let fullurl = 'cases' + '?filter='
-    //fullurl += ray.parseQuery(query)
-    fullurl += encodeURIComponent(query)
+    if (typeof (query) == 'string') {
+        if (query[0] === '{') {
+            fullurl += encodeURIComponent(query)
+        } else {
+            fullurl += query
+        }
+    } else if (typeof (query) == 'object') {
+        fullurl += ray.convertQuery(query)
+    }
     return ray.get(fullurl)
 }
 
@@ -124,16 +131,24 @@ ray.getFile = (cmd,uuid,pretty)=>{
     return ray.get('files/' + project_id + '?pretty=' + pretty)
 }
 
-// get annotions
-ray.getAnnotions = (cmd)=>{
+// get annotations
+ray.getAnnotations = (cmd,query,pretty)=>{
     pretty = pretty || 'true'
-    let fullurl = 'annotions' + '?filter='
-    fullurl += ray.parseQuery(query)
+    let fullurl = 'annotations' + '?filter='
+    if (typeof (query) == 'string') {
+        if (query[0] === '{') {
+            fullurl += encodeURIComponent(query)
+        } else {
+            fullurl += query
+        }
+    } else if (typeof (query) == 'object') {
+        fullurl += ray.convertQuery(query)
+    }
     return ray.get(fullurl)
 }
 
 ray.get_mapping = (cmd)=>{
-    return ray.get('_mapping')
+    return ray.get('/projects/_mapping')
 }
 
 // parse query from json filter
@@ -151,16 +166,10 @@ ray.parseQuery = (query)=>{
 }
 
 // construct url from json object
-ray.parseParms = (parms)=>{
+ray.convertQuery = (parms)=>{
     if (parms == null)
         return parms
-
-    let output = "?"
-    let items = parms.split(',')
-    for (let i = 0; i < items.length; ++i) {
-        output += "${items[i]}=${parms[items[i]]}&"
-    }
-    return output
+    return encodeURIComponent(JSON.stringify(parms))
 }
 
 // try to parse JSON and return the object
@@ -200,19 +209,39 @@ ray.getObj = async(cmd)=>{
     switch (obj['method']) {
     case 'projects':
         console.log('method found: projects')
-        return ray.getProjects(obj, obj['from'], obj['sort'], obj['pretty'])
+        return ray.getProjects(obj, obj['from'], obj['size'], obj['sort'], obj['pretty'])
         break
     case 'project':
         console.log('method found: project')
-        return await ray.getProject(obj,'TARGET-NBL')
+        return await ray.getProject(obj,obj['project_id'],obj['expand'],obj['pretty'])
         break
     case 'status':
         console.log('method found: status')
-        return await ray.getStatus()
+        return await ray.getStatus(obj)
         break
     case 'cases':
         console.log('method found: cases')
-        return await ray.getCases(obj,)
+        return await ray.getCases(obj,obj['query'],obj['pretty'])
+        break
+    case 'case':
+        console.log('method found: case')
+        return await ray.getCase(obj,obj['uuid'],obj['pretty'],obj['expand'])
+        break
+    case 'files':
+        console.log('method found: files')
+        return await ray.getFiles(obj,obj['from'],obj['size'],obj['sort'],obj['pretty'])
+        break
+    case 'file':
+        console.log('method found: file')
+        return await ray.getFile(obj,obj['uuid'],obj['pretty'])
+        break
+    case 'file':
+        console.log('method found: annotations')
+        return await ray.getAnnotations(obj,obj['query'],obj['pretty'])
+        break
+    case '_mapping':
+        console.log('method found: _mapping')
+        return await ray.get_mapping(obj)
         break
     default:
         console.log('invalid method, return status instead')
