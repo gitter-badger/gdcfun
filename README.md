@@ -25,13 +25,12 @@ gdcfun library supports three methods to use:
 * You need to include the gdcfun library script in the html contents.
 
 ```html
-<script src="https://mathbiol.github.io/gdcfun/gdcfun.js"></script>
+<script src="https://mathbiol.github.io/gdcfun/ray.js"></script>
 ```
 
 ### Observable Notebook 
 
 * Observable Notebook (https://beta.observablehq.com)
-
 * You need to specify the `require` statement in the code block.
 
 ```javascript
@@ -49,16 +48,71 @@ gf = require('https://mathbiol.github.io/gdcfun/ray.js')
 The basic format of the object is 
 
 ```json
-{
+[{
     "method": "projects",
     "from": 0,
     "size": 8,
     "sort": "project.project_id:asc",
     "pretty": true
+}]
+```
+
+Supported methods are `["status", "projects", "project", "files", "file", "cases", "case", "annotations", "_mapping"]`.
+
+With the `method` specified, `ray.getObj()` calls the function `ray.getProjects()`. The whole process returns the following message if succeeded.
+
+```
+method found: projects
+success: getting projects?from=0&size=8&sort=project.project_id:asc&pretty=true
+```
+
+And the response is
+
+```json
+{
+  "data": {
+    "hits": [
+      {
+        "dbgap_accession_number": null,
+        "disease_type": [
+          "Brain Lower Grade Glioma"
+        ],
+        "released": true,
+        "state": "legacy",
+        "primary_site": [
+          "Brain"
+        ],
+        "project_id": "TCGA-LGG",
+        "id": "TCGA-LGG",
+        "name": "Brain Lower Grade Glioma"
+      },
+      ...
+    ],
+    "pagination": {
+      "count": 2,
+      "sort": "project.project_id:asc",
+      "from": 0,
+      "page": 1,
+      "total": 39,
+      "pages": 20,
+      "size": 2
+    }
+  },
+  "warnings": {}
 }
 ```
 
+If `method` is not specified in the object, `ray.getObj()` would return the following message and calls `ray.getStatus()` instead.
 
+```
+missing method, return status instead
+```
+
+If `method` is not supported (listed above) or invalid, `ray.getObj()` would return the following message and calls `ray.getStatus()` as well.
+
+```
+invalid method, return status instead
+```
 
 #### .get()
 
