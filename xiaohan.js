@@ -1,4 +1,4 @@
-console.log('xiaohan.js')
+console.log('xiaohan.js loaded')
 
 xiaohan = function(cmd) {
     this.url = 'https://api.gdc.cancer.gov';
@@ -131,6 +131,19 @@ xiaohan = function(cmd) {
         
 //     } 
 
+    this.get_mapping = function() {
+        if (typeof arguments === 'undefined') {
+            return {error: "Need endpoint"};
+        }
+        var endpoint = arguments[0];
+        var endpoints = ['projects', 'files', 'cases', 'annotations'];
+        if (endpoints.indexOf(endpoint) == -1) {
+            return {error: "Wrong endpoint"};
+        } else {
+            return this.get(endpoint+'/_mapping')
+        }
+
+    }
 
     if (cmd) {
         return this.cmd;
@@ -145,7 +158,7 @@ xiaohan = function(cmd) {
 //     exports.method = xiaohan;
 //     return exports;
 // })
-
 module.exports = {
     xiaohan: xiaohan
 }
+
