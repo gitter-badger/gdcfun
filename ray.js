@@ -254,16 +254,16 @@ ray.getObj = async(cmd)=>{
 }
 
 // define(ray) export module.exports
-if (typeof (define) !== "undefined") {
-    define(ray)
-    console.log('ray.js defined')
-} else {
+// if (typeof (define) !== "undefined") {
+//     define(ray)
+//     console.log('ray.js defined')
+// } else {
 //     define(function() {
 //         var exports = {};
 //         exports.method = ray;
 //         return exports;
 //     })
-}
+// }
 
 define (function(){
     var exports = {};
