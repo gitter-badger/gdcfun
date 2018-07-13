@@ -45,6 +45,7 @@ ray.recordStatus = (cmd)=>{
     }
 }
 
+// get status
 ray.getStatus = (cmd)=>{
     return ray.get('status')
 }
@@ -52,8 +53,12 @@ ray.getStatus = (cmd)=>{
 // get projects 
 ray.getProjects = (cmd,from,size,sort,pretty)=>{
     from = from || '0'
+    size = size || '10'
     sort = sort || 'project.project_id:asc'
-    pretty = pretty || 'true'
+    console.log(typeof (pretty))
+    if (typeof (pretty) !== 'Boolean') {
+        pretty = pretty || 'true'
+    }
 
     let fullurl = 'projects' + '?from=' + from
     if (size != undefined) {
@@ -191,9 +196,7 @@ ray.escape = (str)=>{
 
 // getObj function: read in object and automatically catagorize the query
 ray.getObj = async(cmd)=>{
-    //ray.escape()
-    //encodeURIComponent
-    //decodeURIComponent
+    //ray.escape(cmd)
     var obj = {
         "method": undefined
     }
@@ -245,7 +248,7 @@ ray.getObj = async(cmd)=>{
         break
     default:
         console.log('invalid method, return status instead')
-        return await ray.get()
+        return await ray.getStatus(obj)
     }
 
 }

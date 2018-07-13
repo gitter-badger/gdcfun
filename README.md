@@ -3,7 +3,7 @@ Google Summer of Code Open Health GDC exploration (NCI's Genomic Data Commons)
 
 Live at https://mathbiol.github.io/gdcfun !
 
-Current version: v0.0.1
+Current version: v0.0.2
 
 ___
 
@@ -18,7 +18,7 @@ gdcfun library supports three methods to use:
 ### Node.js localhost server
 
 * First, you need to install the gdcfun library with `npm -i gdcfun`  or `npm install gdcfun`.
-* Then, you need to run `http-server -i <port number> ` and edit the contents in `localhost:8080`
+* Then, you need to run `http-server -i <port number> ` and edit the contents in `localhost:<port number>`
 
 ### Browser (Chrome) development tool
 
@@ -35,20 +35,40 @@ gdcfun library supports three methods to use:
 * You need to specify the `require` statement in the code block.
 
 ```javascript
-gf = require('https://mathbiol.github.io/gdcfun/gdcfun.js')
+gf = require('https://mathbiol.github.io/gdcfun/ray.js')
 ```
 
 ## Usage
 
-### general
+### General
 
-The main function in the gdcfun library to conduct the ``ray.get()`` function. 
+#### .getObj()
+
+`ray.getObj()` is an asynchronous function that reads in an object that specifies the requirement of search/retrieval and returns the corresponding results of API fetch. It is a new feature in v0.0.2, and it enables users to fetch API easily without the knowledge of the functions in the Examples section.
+
+The basic format of the object is 
+
+```json
+{
+    "method": "projects",
+    "from": 0,
+    "size": 8,
+    "sort": "project.project_id:asc",
+    "pretty": true
+}
+```
+
+
+
+#### .get()
+
+The main fetch function in the gdcfun library to conduct the ``ray.get()`` function. 
 
 ```javascript
 ray.get=async(cmd, callback)
 ```
 
-This will return an object promise and a status message. By default the ``ray.get()`` would return the result of  ``ray.get('status')`` if no parameters are specified.
+This will return an object promise and a status message. By default the ``ray.get()`` would return the promise result of  ``ray.get('status')`` if no parameters are specified.
 
 ```
 Promise {<pending>}
@@ -62,9 +82,9 @@ All the methods mentioned in the *Examples* part would call the `ray.get()` with
 
 ### Examples
 
-#### .getProjects()
+#### .getProjects(cmd)
 
-``ray.getProjects()`` returns the list of project records and pagination data. By default, the settings are
+``ray.getProjects()`` returns the list of project records and pagination data. By default, the settings are 
 
 ```json
 {
