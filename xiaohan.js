@@ -121,6 +121,16 @@ xiaohan = function(cmd) {
         return this.get(query);
     }
 
+//     this.getAnnnotation = function() {
+//         var defaultParams = {}
+
+//         if (typeof arguments === 'undefined') {
+//             return this.get('annotations')
+//         }
+//         params = arguments[0];
+        
+//     } 
+
 
     if (cmd) {
         return this.cmd;
@@ -130,8 +140,11 @@ xiaohan = function(cmd) {
 }
 
 
-define (function(){
-    var exports = {};
-    exports.method = xiaohan;
-    return exports;
-})
+// define (function(){
+//     var exports = {};
+//     exports.method = xiaohan;
+//     return exports;
+// })
+module.exports = {
+    xiaohan: xiaohan
+}
