@@ -158,7 +158,12 @@ xiaohan = function(cmd) {
 //     exports.method = xiaohan;
 //     return exports;
 // })
-module.exports = {
-    xiaohan: xiaohan
-}
+// module.exports = {
+//     xiaohan: xiaohan
+// }
 
+define (function(module, exports){
+    module.exports = {
+        xiaohan: xiaohan
+    }
+});
