@@ -27,20 +27,20 @@ ray = function() {
         //callback(cmd)
     }
 
-//     recording status when function is initiatized
-//     this.recordStatus = (cmd)=>{
-//         var that = this
-//         this.get().then(x=>{
-//             that.status = x
-//             console.log('initialization API status at ' + Date() + ':', x)
-//         }
-//         )
-//         if (cmd) {
-//             return this.get(cmd)
-//         } else {
-//             return this
-//         }
-//     }
+    //     recording status when function is initiatized
+    //     this.recordStatus = (cmd)=>{
+    //         var that = this
+    //         this.get().then(x=>{
+    //             that.status = x
+    //             console.log('initialization API status at ' + Date() + ':', x)
+    //         }
+    //         )
+    //         if (cmd) {
+    //             return this.get(cmd)
+    //         } else {
+    //             return this
+    //         }
+    //     }
 
     // get status
     this.getStatus = (cmd)=>{
@@ -197,8 +197,12 @@ ray = function() {
         var obj = {
             "method": undefined
         }
-        if (json = this.tryParseJSON(cmd)) {
-            obj = json
+        if (typeof (cmd) !== 'object') {
+            if (json = this.tryParseJSON(cmd)) {
+                obj = json
+            }
+        } else {
+            obj = cmd
         }
         console.log(obj)
         //obj = JSON.parse(json);
