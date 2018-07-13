@@ -153,17 +153,17 @@ xiaohan = function(cmd) {
 }
 
 
-// define (function(){
-//     var exports = {};
-//     exports.method = xiaohan;
-//     return exports;
-// })
+define (function(){
+    var exports = {};
+    exports.method = xiaohan;
+    return exports;
+})
 // module.exports = {
 //     xiaohan: xiaohan
 // }
 
-define (function(module, exports){
-    module.exports = {
-        xiaohan: xiaohan
-    }
-});
+// define (function(module, exports){
+//     module.exports = {
+//         xiaohan: xiaohan
+//     }
+// });
