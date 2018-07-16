@@ -53,7 +53,7 @@ ray = function() {
         size = size || '10'
         sort = sort || 'project.project_id:asc'
         console.log(typeof (pretty))
-        if (typeof (pretty) !== 'Boolean') {
+        if (typeof (pretty) !== 'boolean') {
             pretty = pretty || 'true'
         }
 
