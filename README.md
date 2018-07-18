@@ -17,7 +17,7 @@ gdcfun library supports three methods to use:
 
 ### Node.js localhost server
 
-* First, you need to install the gdcfun library with `npm -i gdcfun`  or `npm install gdcfun`.
+* First, you need to install the gdcfun library with `npm i gdcfun`  or `npm install gdcfun`.
 * Then, you need to run `http-server -i <port number> ` and edit the contents in `localhost:<port number>`
 
 ### Browser (Chrome) development tool
@@ -39,6 +39,14 @@ gf = require('https://mathbiol.github.io/gdcfun/ray.js')
 
 ## Usage
 
+The correct method to require `ray.js` is use `await` to resolve the promise and `.method()` to retrieve the functions. A common wrong method to require `ray.js` only with `require()` would not be resolved with complete functions. 
+
+```javascript
+ray = new(await require('https://mathbiol.github.io/gdcfun/ray.js')).method() // correct method
+r = require('https://mathbiol.github.io/gdcfun/ray.js') // wrong method
+```
+
+
 ### General
 
 #### .getObj()
@@ -48,13 +56,13 @@ gf = require('https://mathbiol.github.io/gdcfun/ray.js')
 The basic format of the object is 
 
 ```json
-[{
+{
     "method": "projects",
     "from": 0,
     "size": 8,
     "sort": "project.project_id:asc",
     "pretty": true
-}]
+}
 ```
 
 Supported methods are `["status", "projects", "project", "files", "file", "cases", "case", "annotations", "_mapping"]`.
@@ -122,7 +130,7 @@ The main fetch function in the gdcfun library to conduct the ``ray.get()`` funct
 ray.get=async(cmd, callback)
 ```
 
-This will return an object promise and a status message. By default the ``ray.get()`` would return the promise result of  ``ray.get('status')`` if no parameters are specified.
+This will return an object promise and a status message. By default the ``ray.get()`` would return the promise result of  ``ray.get('status')`` if no parameters are specified. The detailed promise description from chrome is:
 
 ```
 Promise {<pending>}
@@ -132,32 +140,27 @@ Promise {<pending>}
 success: getting status
 ```
 
-All the methods mentioned in the *Examples* part would call the `ray.get()` with different parameters specified.
+All the methods mentioned in the __Examples__ section would call `ray.get()` eventually with different parameters specified.
 
 ### Examples
 
-#### .getProjects(cmd)
+#### .getProjects(cmd, from, size, sort, pretty)
 
-``ray.getProjects()`` returns the list of project records and pagination data. By default, the settings are 
+``ray.getProjects()`` returns the list of project records and pagination data. The function is called by ``ray.getProjects(cmd, from, size, sort, pretty)``, or directly by ``ray.getObj({"method": "projects", ...})``. By default, the object of query and settings is 
 
 ```json
 {
+    "method": "projects",
     "from": 0,
     "size": 2,
     "sort": "project.project_id:asc",
     "pretty": true
 }
 ```
-
-And the function is called by
-
-```
-ray.getProjects(cmd, from, size, sort, pretty)
-```
-
-The result and the status message returned is
+The status message and the result returned are:
 
 ```json
+success: getting projects?from=0&size=2&sort=project.project_id:asc&pretty=true
 {
   "data": {
     "hits": [
@@ -189,31 +192,26 @@ The result and the status message returned is
   },
   "warnings": {}
 }
-        
-success: getting projects?from=0&sort=project.project_id:asc&pretty=true
 ```
 
-#### .getProject()
+#### .getProject(cmd, project_id, expand, pretty)
 
-``ray.getProject()`` returns the metadata of a single project by ``project_id``. By default, the settings are
+``ray.getProject()`` returns the metadata of a single project by ``project_id``. The function is called by ``ray.getProject(cmd, project_id, expand, pretty)``, or directly by ``ray.getObj({"method": "project", ...})``.  By default, the object of query and settings is  (If a valid ``project_id `` is fed, for example ``TARGET-NBL ``)
 
 ```json
 {
-    "project_id": "string",
+    "method" : "project",
+    "project_id": "TARGET-NBL",
     "expand": "summary,summary.experimental_strategies,summary.data_categories",
     "pretty": true
 }
 ```
 
-If a valid ``project_id `` is fed (for example ``TARGET-NBL ``), the function is called by
-
-```
-getProject(cmd, project_id, expand, )
-```
-
-The result and the status message returned is
+The status message and the result returned are: 
 
 ```json
+success: getting projects/TARGET-NBL?expand=summary,summary.experimental_strategies,summary.data_categories&pretty=true
+
 {
    "data": {
       "dbgap_accession_number": "phs000467",
@@ -251,13 +249,72 @@ The result and the status message returned is
    },
    "warnings": {}
 }
-
-success: getting projects/TARGET-NBL?expand=summary,summary.experimental_strategies,summary.data_categories&pretty=true
 ```
 
 If project_id is missing, ``.getProject()`` would return an empty object and the status message would be
 
 ```
 failure: missing project_id
+```
+
+#### .getCases(cmd,query,pretty)
+
+``ray.getCases()`` returns the metadata of a single project by ``project_id``.  The function is called by ``getCases= (cmd, query,pretty)``, or directly by ``ray.getObj({"method": "cases", ...})``.  By default, the object of query and settings is  (If a valid ``query`` is fed, for example ``TARGET-NBL ``)
+
+#### .convertQuery(parms)
+
+``ray.convertQuery()`` returns the encoded string of the query object by ``obj`` input. The function is called by `ray.convertQuery(parms)` . The input object ``obj`` would be first stringfied and then be encoded with *Percent-(URL)-encoding* method. A sample input is
+
+```javascript
+queryObj = {
+    "method": "case",
+    "op": "and",
+    "content": [
+        {
+            "op": "in",
+            "content": {
+                "field": "cases.submitter_id",
+                "value": [
+                    "TCGA-CK-4948",
+                    "TCGA-D1-A17N",
+                    "TCGA-4V-A9QX",
+                    "TCGA-4V-A9QM"
+                ]
+            }
+        },
+        {
+            "op": "=",
+            "content": {
+                "field": "files.data_type",
+                "value": "Gene Expression Quantification"
+            }
+        }
+    ]
+}
+```
+
+The result of calling ``ray.converQuery(queryObj)`` is
+
+```
+%7B%22method%22%3A%22case%22%2C%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.submitter_id%22%2C%22value%22%3A%5B%22TCGA-CK-4948%22%2C%22TCGA-D1-A17N%22%2C%22TCGA-4V-A9QX%22%2C%22TCGA-4V-A9QM%22%5D%7D%7D%2C%7B%22op%22%3A%22%3D%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_type%22%2C%22value%22%3A%22Gene%20Expression%20Quantification%22%7D%7D%5D%7D
+```
+
+#### .parseQuery(query)
+
+``ray.parseQuery()`` returns the decoded object of the encoded query string by ``query`` input. The function is called by `ray.parseQuery(query)` . The input object ``query`` would be first split by `&` and then be separated into key-value pairs. A sample input is
+
+```javascript
+sampleStr = "filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.submitter_id%22%2C%22value%22%3A%5B%22TCGA-CK-4948%22%2C%22TCGA-D1-A17N%22%2C%22TCGA-4V-A9QX%22%2C%22TCGA-4V-A9QM%22%5D%7D%7D%2C%7B%22op%22%3A%22%3D%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_type%22%2C%22value%22%3A%22Gene%20Expression%20Quantification%22%7D%7D%5D%7D&format=tsv&fields=file_id,file_name,cases.submitter_id,cases.case_id,data_category,data_type,cases.samples.tumor_descriptor,cases.samples.tissue_type,cases.samples.sample_type,cases.samples.submitter_id,cases.samples.sample_id,analysis.workflow_type,cases.project.project_id,cases.samples.portions.analytes.aliquots.aliquot_id,cases.samples.portions.analytes.aliquots.submitter_id&size=1000"
+```
+
+The result of calling ``ray.parseQuery(sampleObj)`` is
+
+```javascript
+{
+    "fields": "file_id,file_name,cases.submitter_id,cases.case_id,data_category,data_type,cases.samples.tumor_descriptor,cases.samples.tissue_type,cases.samples.sample_type,cases.samples.submitter_id,cases.samples.sample_id,analysis.workflow_type,cases.project.project_id,cases.samples.portions.analytes.aliquots.aliquot_id,cases.samples.portions.analytes.aliquots.submitter_id",
+    "filters": "%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.submitter_id%22%2C%22value%22%3A%5B%22TCGA-CK-4948%22%2C%22TCGA-D1-A17N%22%2C%22TCGA-4V-A9QX%22%2C%22TCGA-4V-A9QM%22%5D%7D%7D%2C%7B%22op%22%3A%22%3D%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_type%22%2C%22value%22%3A%22Gene%20Expression%20Quantification%22%7D%7D%5D%7D",
+    "format": "tsv",
+    "size": "1000"
+}
 ```
 

@@ -168,10 +168,10 @@ ray = function() {
     }
 
     // construct url from json object
-    this.convertQuery = (parms)=>{
-        if (parms == null)
-            return parms
-        return encodeURIComponent(JSON.stringify(parms))
+    this.convertQuery = (obj)=>{
+        if (obj == null)
+            return obj
+        return encodeURIComponent(JSON.stringify(obj))
     }
 
     // try to parse JSON and return the object
