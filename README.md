@@ -1,15 +1,17 @@
 # gdcfun
-Google Summer of Code Open Health GDC exploration (NCI's Genomic Data Commons)
+[Google Summer of Code](https://summerofcode.withgoogle.com/projects/#6284727233806336) Open Health GDC exploration (NCI's Genomic Data Commons)
 
 Live at https://mathbiol.github.io/gdcfun !
 
-Current version: v0.0.2
+Current version: v0.1.0
 
 ___
 
 ## Introduction
 
-gdcfun is designed to make the query of GDC simple. It enables users to quickly search data or files with a little effort through the GDC REST API (https://gdc.cancer.gov/developers/gdc-application-programming-interface-api). 
+gdcfun is designed to make the query of GDC simple. It enables users to quickly search data or files with a little effort through the [GDC REST API](https://gdc.cancer.gov/developers/gdc-application-programming-interface-api). 
+
+___
 
 ## Getting Started
 
@@ -17,12 +19,12 @@ gdcfun library supports three methods to use:
 
 ### Node.js localhost server
 
-* First, you need to install the gdcfun library with `npm i gdcfun`  or `npm install gdcfun`.
-* Then, you need to run `http-server -i <port number> ` and edit the contents in `localhost:<port number>`
+* Install the gdcfun library with `npm i gdcfun`  or `npm install gdcfun`.
+* Run `http-server -i <port number> ` in command line and edit the contents in `localhost:<port number>`
 
 ### Browser (Chrome) development tool
 
-* You need to include the gdcfun library script in the html contents.
+* Include the gdcfun library script in the html contents.
 
 ```html
 <script src="https://mathbiol.github.io/gdcfun/ray.js"></script>
@@ -30,8 +32,8 @@ gdcfun library supports three methods to use:
 
 ### Observable Notebook 
 
-* Observable Notebook (https://beta.observablehq.com)
-* You need to specify the `require` statement in the code block.
+* Open a new notebook in [Observable Notebook](https://beta.observablehq.com)
+* Specify the `require` statement in the code block.
 
 ```javascript
 gf = require('https://mathbiol.github.io/gdcfun/ray.js')
@@ -149,7 +151,7 @@ All the methods mentioned in the __Examples__ section would call `ray.get()` eve
 ``ray.getProjects()`` returns the list of project records and pagination data. The function is called by ``ray.getProjects(cmd, from, size, sort, pretty)``, or directly by ``ray.getObj({"method": "projects", ...})``. By default, the object of query and settings is 
 
 ```json
-{
+projectsJson = {
     "method": "projects",
     "from": 0,
     "size": 2,
@@ -199,7 +201,7 @@ success: getting projects?from=0&size=2&sort=project.project_id:asc&pretty=true
 ``ray.getProject()`` returns the metadata of a single project by ``project_id``. The function is called by ``ray.getProject(cmd, project_id, expand, pretty)``, or directly by ``ray.getObj({"method": "project", ...})``.  By default, the object of query and settings is  (If a valid ``project_id `` is fed, for example ``TARGET-NBL ``)
 
 ```json
-{
+projectJson = {
     "method" : "project",
     "project_id": "TARGET-NBL",
     "expand": "summary,summary.experimental_strategies,summary.data_categories",
@@ -255,6 +257,112 @@ If project_id is missing, ``.getProject()`` would return an empty object and the
 
 ```
 failure: missing project_id
+```
+
+#### .getCases(cmd, query, pretty)
+
+`ray.getCases()` returns the list of hits of cases by the specific `query`. The function is called by `ray.getCases(cmd, query, pretty)`, or directly by `ray.getObj({"method": "cases", ...})`. By default, the object of query and settings is
+
+```javascript
+casesJson = {
+    "method": "cases",
+    "query": {"op":"and","content":[{"op":"in","content":{"field":"submitter_id","value":["TCGA-BH-A0EA"]}}]},
+    "pretty": true
+  }
+```
+
+The status message and the result returned are:
+
+```javascript
+method found: cases
+success: getting cases?filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22submitter_id%22%2C%22value%22%3A%5B%22TCGA-BH-A0EA%22%5D%7D%7D%5D%7D%0A%0A&pretty=true
+
+{
+    "data": {
+        "hits": [
+            {
+                "updated_datetime": "2018-05-21T16:07:40.645885-05:00",
+                "submitter_analyte_ids": [
+                    "TCGA-BH-A0EA-01A-11R",
+                    "TCGA-BH-A0EA-10A-01W",
+                    "TCGA-BH-A0EA-01A-11W",
+                    "TCGA-BH-A0EA-01A-11D",
+                    "TCGA-BH-A0EA-10A-01D"
+                ],
+                "analyte_ids": [
+                    "f19f408a-815f-43d9-8032-e9482b796371",
+                    "fe678556-acf4-4bde-a95e-860bb0150a95",
+                    "66ed0f86-5ca5-4dec-ba76-7ee4dcf31831",
+                    "69ddc092-88a0-4839-a2bb-9f1c9e760409",
+                    "30cb470f-66d4-4085-8c30-83a42e8453d4"
+                ],
+                "submitter_id": "TCGA-BH-A0EA",
+                "case_id": "1f601832-eee3-48fb-acf5-80c4a454f26e",
+                "id": "1f601832-eee3-48fb-acf5-80c4a454f26e",
+                "disease_type": "Breast Invasive Carcinoma",
+                "sample_ids": [
+                    "9a6c71a6-82cd-42b1-a93f-f569370848d6",
+                    "7f791228-dd77-4ab0-8227-d784a4c7fea1",
+                    "55864d86-dab8-47bb-a3e3-8cfb198b06c1"
+                ],
+                "portion_ids": [
+                    "cb6086d1-3416-4310-b109-e8fa6e8b72d4",
+                    "8629bf5a-cdaf-4f6a-90bb-27dd4a7565c5",
+                    "ae4f5816-f97a-4605-9b05-9ab820467dee"
+                ],
+                "submitter_portion_ids": [
+                    "TCGA-BH-A0EA-01A-21-A13C-20",
+                    "TCGA-BH-A0EA-01A-11",
+                    "TCGA-BH-A0EA-10A-01"
+                ],
+                "created_datetime": null,
+                "slide_ids": [
+                    "90154ea1-6b76-4445-870e-d531d6fa1239",
+                    "a0826f0d-986a-491b-8c6f-b34f8929f3ee",
+                    "1dd1cab5-5a81-428a-8153-91e8c4cf9905"
+                ],
+                "state": "live",
+                "aliquot_ids": [
+                    "eef9dce1-6ba6-432b-bbe2-53c7dbe64fe7",
+                    "cde982b7-3b0a-49eb-8710-a599cb0e44c1",
+ 				   ...
+                ],
+                "primary_site": "Breast",
+                "submitter_aliquot_ids": [
+                    "TCGA-BH-A0EA-10A-01D-A113-01",
+                    "TCGA-BH-A0EA-01A-11R-A115-07",
+ 				   ...
+                ],
+                "submitter_sample_ids": [
+                    "TCGA-BH-A0EA-10A",
+                    "TCGA-BH-A0EA-01Z",
+                    "TCGA-BH-A0EA-01A"
+                ],
+                "submitter_slide_ids": [
+                    "TCGA-BH-A0EA-01Z-00-DX1",
+                    "TCGA-BH-A0EA-01A-01-MSA",
+                    "TCGA-BH-A0EA-01A-01-TSA"
+                ]
+            }
+        ],
+        "pagination": {
+            "count": 1,
+            "sort": "",
+            "from": 0,
+            "page": 1,
+            "total": 1,
+            "pages": 1,
+            "size": 10
+        }
+    },
+    "warnings": {}
+}
+```
+
+If `query` is missing, `.getCases()` would return an empty object and the status message would be 
+
+```javascript
+failure: missing query
 ```
 
 #### .getCase(*cmd, uuid, pretty, expand*)
@@ -355,7 +463,7 @@ If ``uuid`` is missing, ``.getProject()`` would return an empty object and th
 failure: missing uuid
 ```
 
-#### .getFiles(cmd,from,size,sort,pretty)
+#### .getFiles(*cmd, from, size, sort, pretty*)
 
 `ray.getFiles()` returns the metadata of a single project by `project_id`. The function is called by `ray.getProjects(cmd, from, size, sort, pretty)`, or directly by `ray.getObj({"method": "project", ...})`. By default, the object of query and settings is
 
@@ -435,7 +543,7 @@ success: getting files?from=0&size=3&sort=file_size:asc&pretty=true
 }
 ```
 
-#### .getFile(cmd, uuid, pretty)
+#### .getFile(*cmd, uuid, pretty*)
 
 `ray.getFile()` returns the metadata of a single case using its `uuid`. The function is called by `ray.getFile(cmd, uuid, pretty)`, or directly by `ray.getObj({"method": "file", ...})`. By default, the object of query and settings is (If a valid `uuid` is fed (for example `6680627c-f70b-45fd-854b-208be561a9e8`))
 
@@ -482,6 +590,109 @@ If ``uuid`` is missing, ``.getFile()`` would return an empty object and the s
 
 ```
 failure: missing uuid
+```
+
+#### .getAnnotations(*cmd, query, pretty*)
+
+`ray.getAnnotations()` returns the query result in search and retrieval of annotations stored. The function is called by `ray.getAnnotations(cmd, query, pretty)`, or directly by `ray.getObj({"method": "annotations", ...})`. By default, the object of query and settings is
+
+```javascript
+annotationsJson = {
+    "method": "annotations",
+    "query": {
+       "op":"in",
+       "content":{
+           "field":"entity_id",
+           "value":[
+                "e0d36cc0-652c-4224-bb10-09d15c7bd8f1",
+                "25ebc29a-7598-4ae4-ba7f-618d448882cc",
+                "fe660d7c-2746-4b50-ab93-b2ed99960553"
+            ]
+       }
+    },
+    "pretty": true
+}
+```
+
+The status message and the result returned are:
+
+```javascript
+method found: annotations
+success: getting annotations?filter=%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22entity_id%22%2C%22value%22%3A%5B%22e0d36cc0-652c-4224-bb10-09d15c7bd8f1%22%2C%2225ebc29a-7598-4ae4-ba7f-618d448882cc%22%2C%22fe660d7c-2746-4b50-ab93-b2ed99960553%22%5D%7D%7D
+
+{
+  "data": {
+    "hits": [
+      {
+        "category": "Item flagged DNU",
+        "status": "Approved",
+        "entity_id": "fe660d7c-2746-4b50-ab93-b2ed99960553",
+        "classification": "CenterNotification",
+        "entity_type": "aliquot",
+        "created_datetime": "2015-09-28T00:00:00",
+        "annotation_id": "5ddadefe-8b57-5ce2-b8b2-918d63d99a59",
+        "notes": "The aliquot failed Broad pipeline QC and not all files are suitable for use. Consult the SDRF file to determine which files are usable.",
+        "updated_datetime": "2017-03-09T13:20:38.962182-06:00",
+        "submitter_id": "29087",
+        "state": "submitted",
+        "case_id": "41b59716-116f-4942-8b63-409870a87e26",
+        "case_submitter_id": "TCGA-DK-A3IM",
+        "entity_submitter_id": "TCGA-DK-A3IM-10A-01D-A20B-01",
+        "id": "5ddadefe-8b57-5ce2-b8b2-918d63d99a59"
+      },
+      {
+        "category": "Item is noncanonical",
+        "status": "Approved",
+        "entity_id": "25ebc29a-7598-4ae4-ba7f-618d448882cc",
+        "classification": "Notification",
+        "entity_type": "sample",
+        "created_datetime": "2012-07-12T00:00:00",
+        "annotation_id": "d6500f94-618f-5334-a810-ade76b887ec9",
+        "notes": "No Matching Normal",
+        "updated_datetime": "2017-03-09T13:47:18.182075-06:00",
+        "submitter_id": "8009",
+        "state": "submitted",
+        "case_id": "bd114e05-5a97-41e2-a0d5-5d39a1e9d461",
+        "case_submitter_id": "TCGA-08-0514",
+        "entity_submitter_id": "TCGA-08-0514-01A",
+        "id": "d6500f94-618f-5334-a810-ade76b887ec9"
+      },
+      {
+        "category": "Prior malignancy",
+        "status": "Approved",
+        "entity_id": "e0d36cc0-652c-4224-bb10-09d15c7bd8f1",
+        "classification": "Notification",
+        "entity_type": "case",
+        "created_datetime": "2013-03-12T00:00:00",
+        "annotation_id": "33336cdf-2cf0-5af2-bb52-fecd3427f180",
+        "notes": "Patient had a prior lymphoma. Unknown radiation or systemic chemotherapy.",
+        "updated_datetime": "2017-03-09T12:11:31.786013-06:00",
+        "submitter_id": "15630",
+        "state": "submitted",
+        "case_id": "e0d36cc0-652c-4224-bb10-09d15c7bd8f1",
+        "case_submitter_id": "TCGA-FS-A1ZF",
+        "entity_submitter_id": "TCGA-FS-A1ZF",
+        "id": "33336cdf-2cf0-5af2-bb52-fecd3427f180"
+      }
+    ],
+    "pagination": {
+      "count": 3,
+      "sort": "",
+      "from": 0,
+      "page": 1,
+      "total": 3,
+      "pages": 1,
+      "size": 10
+    }
+  },
+  "warnings": {}
+}
+```
+
+If `query` is missing, `.getAnnotations()` would return default results and the status message would be
+
+```javascript
+success: getting annotations?filter=&pretty=true
 ```
 
 ### Helper Functions

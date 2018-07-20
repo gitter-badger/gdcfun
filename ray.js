@@ -146,7 +146,7 @@ ray = function() {
         } else if (typeof (query) == 'object') {
             fullurl += this.convertQuery(query)
         }
-        return this.get(fullurl)
+        return this.get(fullurl + '&pretty=' + pretty)
     }
 
     this.get_mapping = (cmd)=>{
