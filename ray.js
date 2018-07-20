@@ -78,7 +78,7 @@ ray = function() {
     }
 
     // get cases
-    this.getCases = (cmd,ca,pretty)=>{
+    this.getCases = (cmd,query,pretty)=>{
         if (query == undefined) {
             console.log('failure: missing query')
             return {}
@@ -109,7 +109,7 @@ ray = function() {
     }
 
     // get files
-    thisf=>{
+    this.getFiles = (cmd,from,size,sort,pretty) => {
         from = from || '0'
         sort = sort || 'project.project_id:asc'
         pretty = pretty || 'true'

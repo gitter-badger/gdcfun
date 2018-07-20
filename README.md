@@ -437,7 +437,52 @@ success: getting files?from=0&size=3&sort=file_size:asc&pretty=true
 
 #### .getFile(cmd, uuid, pretty)
 
-`ray.getFile()` returns the metadata of a single case using its `uuid`. The function is called by `ray.getFile(cmd, uuid, pretty)`, or directly by `ray.getObj({"method": "file", ...})`. By default, the object of query and settings is (If a valid `uuid` is fed (for example `000225ad-497b-4a8c-967e-a72159c9b3c9`))
+`ray.getFile()` returns the metadata of a single case using its `uuid`. The function is called by `ray.getFile(cmd, uuid, pretty)`, or directly by `ray.getObj({"method": "file", ...})`. By default, the object of query and settings is (If a valid `uuid` is fed (for example `6680627c-f70b-45fd-854b-208be561a9e8`))
+
+```javascript
+fileJson = {
+    "method": "file",
+    "uuid": "6680627c-f70b-45fd-854b-208be561a9e8",
+    "pretty": true
+}
+```
+
+The status message and the result returned are:
+
+```javascript
+method found: file
+success: getting files/6680627c-f70b-45fd-854b-208be561a9e8?pretty=true
+
+{
+  "data": {
+    "data_type": "Annotated Somatic Mutation", 
+    "updated_datetime": "2017-10-24T10:21:24.570405-05:00", 
+    "created_datetime": "2017-09-10T13:52:40.396812-05:00", 
+    "file_name": "6680627c-f70b-45fd-854b-208be561a9e8.vep.vcf.gz", 
+    "md5sum": "9af5e6d636771e245605243eb9f36505", 
+    "data_format": "VCF", 
+    "acl": [
+      "phs001179"
+    ], 
+    "access": "controlled", 
+    "state": "submitted", 
+    "file_id": "6680627c-f70b-45fd-854b-208be561a9e8", 
+    "data_category": "Simple Nucleotide Variation", 
+    "file_size": 7982, 
+    "submitter_id": "AD8753_AnnotatedSomaticMutation", 
+    "type": "annotated_somatic_mutation", 
+    "file_state": "submitted", 
+    "experimental_strategy": "Targeted Sequencing"
+  }, 
+  "warnings": {}
+}
+```
+
+If ``uuid`` is missing, ``.getFile()`` would return an empty object and the status message would be 
+
+```
+failure: missing uuid
+```
 
 ### Helper Functions
 
