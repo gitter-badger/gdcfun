@@ -1,6 +1,12 @@
 console.log('xiaohan.js loaded')
 
-xiaohan = function(cmd) {
+let s = document.createElement('script')
+s.src='xiaohan_es6.js'
+document.head.appendChild(s)
+
+
+
+function xiaohan(cmd) {
     this.url = 'https://api.gdc.cancer.gov';
 
     // endpoint: status
@@ -153,14 +159,15 @@ xiaohan = function(cmd) {
 }
 
 
-define (function(){
-    var exports = {};
-    exports.method = xiaohan;
-    return exports;
-})
-// module.exports = {
-//     xiaohan: xiaohan
-// }
+// method 1: AMD 
+// define (function(){
+//     var exports = {};
+//     exports.method = xiaohan;
+//     return exports;
+// })
+
+// method2 : es6 export
+module.exports = xiaohan;
 
 // define (function(module, exports){
 //     module.exports = {
