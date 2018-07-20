@@ -239,7 +239,7 @@ ray = function() {
             console.log('method found: file')
             return await this.getFile(obj,obj['uuid'],obj['pretty'])
             break
-        case 'file':
+        case 'annotations':
             console.log('method found: annotations')
             return await this.getAnnotations(obj,obj['query'],obj['pretty'])
             break
