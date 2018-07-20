@@ -7,6 +7,7 @@ document.head.appendChild(s)
 
 
 function xiaohan(cmd) {
+    this.version = "0.1";
     this.url = 'https://api.gdc.cancer.gov';
 
     // endpoint: status
@@ -159,18 +160,18 @@ function xiaohan(cmd) {
 }
 
 
-// method 1: AMD 
-// define (function(){
-//     var exports = {};
-//     exports.method = xiaohan;
-//     return exports;
-// })
+// method 1: ES5 commonJS
+define (function(){
+    xiaohan = new xiaohan;
+    var exports = {};
+    exports.url = xiaohan.url;
+    exports.getProject = xiaohan.getProject;
+    exports.getCase = xiaohan.getCase;
+    exports.getFile = xiaohan.getFile;
+    exports.get_mapping = xiaohan.get_mapping;
+    return exports;
+})
 
-// method2 : es6 export
-module.exports = xiaohan;
+// method2 : ES6 export
+//module.exports = 'xiaohan';
 
-// define (function(module, exports){
-//     module.exports = {
-//         xiaohan: xiaohan
-//     }
-// });
