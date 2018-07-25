@@ -152,7 +152,7 @@ function xiaohan(cmd) {
 
     }
 
-    this.calSume = function(arr) {
+    this.calSum = function(arr) {
         var map = new Map();
 
         // calculate sum of the appearance time of key
@@ -195,6 +195,7 @@ define (function(){
     exports.getCase = xiaohan.getCase;
     exports.getFile = xiaohan.getFile;
     exports.get_mapping = xiaohan.get_mapping;
+    exports.calSum = xiaohan.calSum;
     return exports;
 })
 
