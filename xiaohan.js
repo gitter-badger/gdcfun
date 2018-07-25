@@ -164,7 +164,9 @@ function xiaohan(cmd) {
 define (function(){
     xiaohan = new xiaohan;
     var exports = {};
+    exports.version = xiaohan.version;
     exports.url = xiaohan.url;
+    exports.get = xiaohan.get;
     exports.getProject = xiaohan.getProject;
     exports.getCase = xiaohan.getCase;
     exports.getFile = xiaohan.getFile;
