@@ -152,6 +152,30 @@ function xiaohan(cmd) {
 
     }
 
+    this.calSume = function(arr) {
+        var map = new Map();
+
+        // calculate sum of the appearance time of key
+        for (var e in arr) {
+            if (map.get(arr[e]) !== undefined) {
+              map.set(arr[e], map.get(arr[e])+1);
+            } else {
+              map.set(arr[e], 1);
+            }
+        }
+        // output = [{name1, value1}, {name2, value2}, ...]
+        let output = [], item;
+
+        for (var key of map.keys()) {
+        item = {};
+        item['name'] = key;
+        item['value'] = map.get(key);
+        output.push(item);
+        }
+
+        return output;
+    }
+
     if (cmd) {
         return this.cmd;
     } else {
