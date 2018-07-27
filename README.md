@@ -1,4 +1,7 @@
 # gdcfun
+
+[![Join the chat at https://gitter.im/mathbiol/gdcfun](https://badges.gitter.im/mathbiol/gdcfun.svg)](https://gitter.im/mathbiol/gdcfun?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [Google Summer of Code](https://summerofcode.withgoogle.com/projects/#6284727233806336) Open Health GDC exploration (NCI's Genomic Data Commons)
 
 Live at https://mathbiol.github.io/gdcfun !
